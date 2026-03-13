@@ -28,11 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // ============================================================
 
     function resetAndAnimate(el, fromStyle, toStyle, delay = 0) {
-
-        // First reset to hidden state instantly
         Object.assign(el.style, fromStyle, { transition: "none" });
-
-        // Then animate in on next frame
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 el.style.transition = `opacity 0.7s ease ${delay}s, transform 0.7s ease ${delay}s`;
@@ -68,7 +64,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const heroImage   = document.querySelector(".hero-image");
     const heroSection = document.querySelector("#home");
 
-    // Initial hidden state
     if (heroText)  Object.assign(heroText.style,  { opacity: "0", transform: "translateX(-50px)" });
     if (heroImage) Object.assign(heroImage.style, { opacity: "0", transform: "translateX(50px)"  });
 
@@ -109,19 +104,90 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // ============================================================
-    // 5. ABOUT SECTION — Slide In + Stat Cards Stagger
+    // 5. ABOUT SECTION — Slide In + Stat Cards Stagger + COUNTER
     // ============================================================
 
     const aboutText    = document.querySelector(".about-text");
     const aboutStats   = document.querySelector(".about-stats");
     const aboutSection = document.querySelector("#about");
 
-    // Initial hidden state
     if (aboutText)  Object.assign(aboutText.style,  { opacity: "0", transform: "translateX(-60px)" });
     if (aboutStats) Object.assign(aboutStats.style, { opacity: "0", transform: "translateX(60px)"  });
     document.querySelectorAll(".stat-card").forEach(card => {
         Object.assign(card.style, { opacity: "0", transform: "translateY(40px) scale(0.95)" });
     });
+
+    // ── Stat Counter Configuration ──────────────────────────────
+    // Each stat-card h3 value: "4+", "8+", "100%", "Data Analyst"
+    const statConfigs = [
+        { target: 4,   suffix: "+",  duration: 2800 },
+        { target: 8,   suffix: "+",  duration: 3200 },
+        { target: 100, suffix: "%",  duration: 4000 },
+        { target: null, text: "Data Analyst"         },  // text — no counter
+    ];
+
+    // Easing function: easeInOutCubic — starts slow, picks up, ends slow (very satisfying)
+    function easeInOutCubic(t) {
+        return t < 0.5
+            ? 4 * t * t * t
+            : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    function animateCounter(el, target, suffix, duration) {
+        el.textContent = "0" + suffix;
+        const startTime = performance.now();
+
+        function tick(now) {
+            const elapsed  = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased    = easeInOutCubic(progress);
+            const current  = Math.round(eased * target);
+            el.textContent = current + suffix;
+
+            if (progress < 1) {
+                requestAnimationFrame(tick);
+            } else {
+                el.textContent = target + suffix;
+            }
+        }
+
+        requestAnimationFrame(tick);
+    }
+
+    function runStatCounters() {
+        const statCards = document.querySelectorAll(".stat-card");
+        statCards.forEach((card, i) => {
+            const h3    = card.querySelector("h3");
+            const cfg   = statConfigs[i];
+            if (!h3 || !cfg) return;
+
+            if (cfg.target === null) {
+                h3.textContent = cfg.text;
+                return;
+            }
+
+            // Stagger each card by 250ms
+            const delay = i * 250;
+            h3.textContent = "0" + cfg.suffix;
+            setTimeout(() => {
+                animateCounter(h3, cfg.target, cfg.suffix, cfg.duration);
+            }, delay);
+        });
+    }
+
+    function resetStatCounters() {
+        const statCards = document.querySelectorAll(".stat-card");
+        statCards.forEach((card, i) => {
+            const h3  = card.querySelector("h3");
+            const cfg = statConfigs[i];
+            if (!h3 || !cfg) return;
+            if (cfg.target === null) {
+                h3.textContent = cfg.text;
+            } else {
+                h3.textContent = "0" + cfg.suffix;
+            }
+        });
+    }
 
     if (aboutSection) {
 
@@ -146,6 +212,9 @@ document.addEventListener("DOMContentLoaded", function () {
                             { opacity: "1", transform: "translateY(0) scale(1)"       }, i * 0.1);
                     });
 
+                    // Start counters after cards start appearing
+                    setTimeout(runStatCounters, 300);
+
                 } else {
 
                     if (aboutText)
@@ -161,6 +230,9 @@ document.addEventListener("DOMContentLoaded", function () {
                             { opacity: "0", transform: "translateY(40px) scale(0.95)", transition: "none" });
                     });
 
+                    // Reset counters when section leaves view
+                    resetStatCounters();
+
                 }
 
             });
@@ -172,10 +244,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ============================================================
     // 6. SKILLS SECTION
-    //    6a. Canvas Particle Background
-    //    6b. SVG Circle Progress + Counter
-    //    6c. 3D Card Tilt
-    //    6d. Staggered Card Entrance
     // ============================================================
 
     (function initSkills() {
@@ -224,7 +292,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     sCtx.fill();
                 });
 
-                // Connecting lines
                 for (let i = 0; i < pts.length; i++) {
                     for (let j = i + 1; j < pts.length; j++) {
                         const dx = pts[i].x - pts[j].x;
@@ -259,7 +326,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // ── 6b. SVG Circle Progress + Counter ──────────────────
-        // Circumference for r=52: 2π × 52 ≈ 326.7
 
         const CIRCUM = 2 * Math.PI * 52;
 
@@ -382,19 +448,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
         skillsObserver.observe(skillsSection);
 
-        // Set initial hidden state
         resetSkillCards();
         resetCircles();
         resetCounters();
 
-    })(); // end initSkills
+    })();
 
 
     // ============================================================
     // 7. PROJECTS SECTION
-    //    7a. Canvas Particle Background
-    //    7b. 3D Card Tilt
-    //    7c. Staggered Card Entrance
     // ============================================================
 
     (function initProjects() {
@@ -448,7 +510,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     pCtx.fill();
                 });
 
-                // Connecting lines
                 for (let i = 0; i < dots.length; i++) {
                     for (let j = i + 1; j < dots.length; j++) {
                         const dx   = dots[i].x - dots[j].x;
@@ -556,7 +617,7 @@ document.addEventListener("DOMContentLoaded", function () {
         projectObserver.observe(projectsSection);
         resetProjectCards();
 
-    })(); // end initProjects
+    })();
 
 
     // ============================================================
@@ -567,7 +628,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const contactForm    = document.querySelector(".contact-form-card");
     const contactSection = document.querySelector("#contact");
 
-    // Initial hidden state
     if (contactInfo) Object.assign(contactInfo.style, { opacity: "0", transform: "translateY(50px)" });
     if (contactForm) Object.assign(contactForm.style, { opacity: "0", transform: "translateY(50px)" });
 
