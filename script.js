@@ -117,16 +117,13 @@ document.addEventListener("DOMContentLoaded", function () {
         Object.assign(card.style, { opacity: "0", transform: "translateY(40px) scale(0.95)" });
     });
 
-    // ── Stat Counter Configuration ──────────────────────────────
-    // Each stat-card h3 value: "4+", "8+", "100%", "Data Analyst"
     const statConfigs = [
         { target: 4,   suffix: "+",  duration: 2800 },
         { target: 8,   suffix: "+",  duration: 3200 },
         { target: 100, suffix: "%",  duration: 4000 },
-        { target: null, text: "Data Analyst"         },  // text — no counter
+        { target: null, text: "Data Analyst"         },
     ];
 
-    // Easing function: easeInOutCubic — starts slow, picks up, ends slow (very satisfying)
     function easeInOutCubic(t) {
         return t < 0.5
             ? 4 * t * t * t
@@ -166,7 +163,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            // Stagger each card by 250ms
             const delay = i * 250;
             h3.textContent = "0" + cfg.suffix;
             setTimeout(() => {
@@ -212,7 +208,6 @@ document.addEventListener("DOMContentLoaded", function () {
                             { opacity: "1", transform: "translateY(0) scale(1)"       }, i * 0.1);
                     });
 
-                    // Start counters after cards start appearing
                     setTimeout(runStatCounters, 300);
 
                 } else {
@@ -230,7 +225,6 @@ document.addEventListener("DOMContentLoaded", function () {
                             { opacity: "0", transform: "translateY(40px) scale(0.95)", transition: "none" });
                     });
 
-                    // Reset counters when section leaves view
                     resetStatCounters();
 
                 }
@@ -250,8 +244,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const skillsSection = document.querySelector("#skills");
         if (!skillsSection) return;
-
-        // ── 6a. Canvas Particle Background ─────────────────────
 
         const skillCanvas = document.getElementById("skillsBgCanvas");
 
@@ -325,8 +317,6 @@ document.addEventListener("DOMContentLoaded", function () {
             sResize();
         }
 
-        // ── 6b. SVG Circle Progress + Counter ──────────────────
-
         const CIRCUM = 2 * Math.PI * 52;
 
         function fillCircles() {
@@ -374,8 +364,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
 
-        // ── 6c. 3D Card Tilt ────────────────────────────────────
-
         const skillCards = document.querySelectorAll(".skill-card[data-skill-tilt]");
 
         skillCards.forEach(card => {
@@ -413,8 +401,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
 
-        // ── 6d. Staggered Card Entrance ─────────────────────────
-
         function resetSkillCards() {
             skillCards.forEach(card => {
                 card.style.transition = "none";
@@ -447,7 +433,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }, { threshold: 0.12 });
 
         skillsObserver.observe(skillsSection);
-
         resetSkillCards();
         resetCircles();
         resetCounters();
@@ -463,8 +448,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const projectsSection = document.querySelector("#projects");
         if (!projectsSection) return;
-
-        // ── 7a. Canvas Particle Background ─────────────────────
 
         const projCanvas = document.getElementById("projectsBg");
 
@@ -544,8 +527,6 @@ document.addEventListener("DOMContentLoaded", function () {
             pResize();
         }
 
-        // ── 7b. 3D Card Tilt ────────────────────────────────────
-
         const projectCards = document.querySelectorAll(".project-card[data-tilt]");
 
         projectCards.forEach(card => {
@@ -585,8 +566,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
 
-        // ── 7c. Staggered Card Entrance ─────────────────────────
-
         function resetProjectCards() {
             projectCards.forEach(card => {
                 card.style.transition = "none";
@@ -621,54 +600,118 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // ============================================================
-    // 8. CONTACT SECTION — Slide Up
+    // 8. CONTACT SECTION — Premium Animated Background
     // ============================================================
 
-    const contactInfo    = document.querySelector(".contact-info");
-    const contactForm    = document.querySelector(".contact-form-card");
-    const contactSection = document.querySelector("#contact");
+    (function initContactBackground() {
 
-    if (contactInfo) Object.assign(contactInfo.style, { opacity: "0", transform: "translateY(50px)" });
-    if (contactForm) Object.assign(contactForm.style, { opacity: "0", transform: "translateY(50px)" });
+        const contactSection = document.querySelector("#contact");
+        if (!contactSection) return;
 
-    if (contactSection) {
+        // Inject Aurora blobs
+        [1, 2, 3].forEach(i => {
+            const div = document.createElement("div");
+            div.classList.add("contact-aurora", `contact-aurora-${i}`);
+            contactSection.insertBefore(div, contactSection.firstChild);
+        });
 
-        const contactObserver = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
+        // Inject Grid overlay
+        const grid = document.createElement("div");
+        grid.classList.add("contact-grid");
+        contactSection.insertBefore(grid, contactSection.firstChild);
 
-                if (entry.isIntersecting) {
+        // Inject Floating Geometric Shapes
+        const geoShapes = [
+            `<svg viewBox="0 0 60 60"><polygon points="30,4 56,52 4,52" fill="none" stroke="rgba(56,189,248,0.4)" stroke-width="1.5"/></svg>`,
+            `<svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="25" fill="none" stroke="rgba(99,102,241,0.4)" stroke-width="1.5"/></svg>`,
+            `<svg viewBox="0 0 60 60"><polygon points="30,4 56,30 30,56 4,30" fill="none" stroke="rgba(56,189,248,0.35)" stroke-width="1.5"/></svg>`,
+            `<svg viewBox="0 0 60 60"><polygon points="30,4 52,17 52,43 30,56 8,43 8,17" fill="none" stroke="rgba(168,85,247,0.35)" stroke-width="1.5"/></svg>`,
+            `<svg viewBox="0 0 60 60"><line x1="30" y1="8" x2="30" y2="52" stroke="rgba(56,189,248,0.3)" stroke-width="1.5"/><line x1="8" y1="30" x2="52" y2="30" stroke="rgba(56,189,248,0.3)" stroke-width="1.5"/></svg>`,
+            `<svg viewBox="0 0 60 60"><rect x="12" y="12" width="36" height="36" fill="none" stroke="rgba(99,102,241,0.4)" stroke-width="1.5" rx="4"/></svg>`,
+        ];
 
-                    if (contactInfo)
-                        resetAndAnimate(contactInfo,
-                            { opacity: "0", transform: "translateY(50px)" },
-                            { opacity: "1", transform: "translateY(0)"    });
+        geoShapes.forEach((shape, i) => {
+            const div = document.createElement("div");
+            div.classList.add("contact-geo", `contact-geo-${i + 1}`);
+            div.innerHTML = shape;
+            contactSection.insertBefore(div, contactSection.firstChild);
+        });
 
-                    if (contactForm)
-                        resetAndAnimate(contactForm,
-                            { opacity: "0", transform: "translateY(50px)" },
-                            { opacity: "1", transform: "translateY(0)"    }, 0.2);
+        // Canvas Particle Network
+        const canvas = document.createElement("canvas");
+        canvas.id = "contactBgCanvas";
+        contactSection.insertBefore(canvas, contactSection.firstChild);
 
-                } else {
+        const ctx = canvas.getContext("2d");
+        let W, H, rafId;
+        const PARTICLE_COUNT = 55;
+        const particles = [];
 
-                    if (contactInfo)
-                        Object.assign(contactInfo.style,
-                            { opacity: "0", transform: "translateY(50px)", transition: "none" });
+        function resize() {
+            W = canvas.width  = contactSection.offsetWidth;
+            H = canvas.height = contactSection.offsetHeight || 600;
+            particles.length = 0;
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                particles.push({
+                    x:     Math.random() * W,
+                    y:     Math.random() * H,
+                    vx:    (Math.random() - 0.5) * 0.35,
+                    vy:    (Math.random() - 0.5) * 0.35,
+                    r:     Math.random() * 1.8 + 0.4,
+                    alpha: Math.random() * 0.35 + 0.08,
+                    hue:   Math.random() > 0.6 ? 200 : (Math.random() > 0.5 ? 240 : 270),
+                });
+            }
+        }
 
-                    if (contactForm)
-                        Object.assign(contactForm.style,
-                            { opacity: "0", transform: "translateY(50px)", transition: "none" });
-
-                }
-
+        function drawBg(t) {
+            ctx.clearRect(0, 0, W, H);
+            particles.forEach(p => {
+                p.x = (p.x + p.vx + W) % W;
+                p.y = (p.y + p.vy + H) % H;
+                const pulse = Math.sin(t * 0.0007 + p.x * 0.015) * 0.06;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${p.hue}, 80%, 70%, ${p.alpha + pulse})`;
+                ctx.fill();
             });
-        }, { threshold: 0.2 });
 
-        contactObserver.observe(contactSection);
-    }
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx   = particles[i].x - particles[j].x;
+                    const dy   = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 110) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(56,189,248,${(1 - dist / 110) * 0.06})`;
+                        ctx.lineWidth   = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+            rafId = requestAnimationFrame(drawBg);
+        }
+
+        const bgObs = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting) {
+                cancelAnimationFrame(rafId);
+                rafId = requestAnimationFrame(drawBg);
+            } else {
+                cancelAnimationFrame(rafId);
+            }
+        }, { threshold: 0.01 });
+
+        bgObs.observe(contactSection);
+        window.addEventListener("resize", resize);
+        resize();
+
+    })();
 
 
     // ============================================================
-    // 9. FOOTER COLUMNS — Staggered Entrance
+    // 10. FOOTER COLUMNS — Staggered Entrance
     // ============================================================
 
     const footerCols = document.querySelectorAll(".footer-col");
@@ -702,9 +745,121 @@ document.addEventListener("DOMContentLoaded", function () {
         footerObserver.observe(footer);
     }
 
+    (function initFooter() {
+
+    const footer = document.querySelector(".footer");
+    if (!footer) return;
+
+    // ── Canvas particle network ──────────────────────────────
+    const canvas = document.getElementById("footerCanvas");
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    let W, H, rafId;
+
+    const DOTS = [];
+    const COUNT = 45;
+
+    function resize() {
+        W = canvas.width  = footer.offsetWidth;
+        H = canvas.height = footer.offsetHeight || 400;
+        DOTS.length = 0;
+        for (let i = 0; i < COUNT; i++) {
+            DOTS.push({
+                x:     Math.random() * W,
+                y:     Math.random() * H,
+                vx:    (Math.random() - 0.5) * 0.25,
+                vy:    (Math.random() - 0.5) * 0.25,
+                r:     Math.random() * 1.5 + 0.4,
+                alpha: Math.random() * 0.25 + 0.06,
+                hue:   Math.random() > 0.5 ? 200 : 240,
+            });
+        }
+    }
+
+    function draw(t) {
+        ctx.clearRect(0, 0, W, H);
+
+        DOTS.forEach(d => {
+            d.x = (d.x + d.vx + W) % W;
+            d.y = (d.y + d.vy + H) % H;
+            const pulse = Math.sin(t * 0.0006 + d.x * 0.01) * 0.05;
+            ctx.beginPath();
+            ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${d.hue}, 75%, 65%, ${d.alpha + pulse})`;
+            ctx.fill();
+        });
+
+        for (let i = 0; i < DOTS.length; i++) {
+            for (let j = i + 1; j < DOTS.length; j++) {
+                const dx   = DOTS[i].x - DOTS[j].x;
+                const dy   = DOTS[i].y - DOTS[j].y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 100) {
+                    ctx.beginPath();
+                    ctx.moveTo(DOTS[i].x, DOTS[i].y);
+                    ctx.lineTo(DOTS[j].x, DOTS[j].y);
+                    ctx.strokeStyle = `rgba(56,189,248,${(1 - dist / 100) * 0.05})`;
+                    ctx.lineWidth   = 0.5;
+                    ctx.stroke();
+                }
+            }
+        }
+
+        rafId = requestAnimationFrame(draw);
+    }
+
+    // Only animate when footer is visible
+    const footerObs = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
+            cancelAnimationFrame(rafId);
+            rafId = requestAnimationFrame(draw);
+        } else {
+            cancelAnimationFrame(rafId);
+        }
+    }, { threshold: 0.01 });
+
+    footerObs.observe(footer);
+    window.addEventListener("resize", resize);
+    resize();
+
+    // ── Footer columns stagger entrance ─────────────────────
+    const cols = document.querySelectorAll(".footer-col");
+    const brand = document.querySelector(".footer-brand-strip");
+
+    [brand, ...cols].forEach(el => {
+        if (el) Object.assign(el.style, { opacity: "0", transform: "translateY(35px)" });
+    });
+
+    const colObs = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                [brand, ...cols].forEach((el, i) => {
+                    if (!el) return;
+                    setTimeout(() => {
+                        el.style.transition = "opacity 0.6s ease, transform 0.6s cubic-bezier(0.34,1.2,0.64,1)";
+                        el.style.opacity    = "1";
+                        el.style.transform  = "translateY(0)";
+                    }, i * 100);
+                });
+            } else {
+                [brand, ...cols].forEach(el => {
+                    if (!el) return;
+                    el.style.transition = "none";
+                    el.style.opacity    = "0";
+                    el.style.transform  = "translateY(35px)";
+                });
+            }
+        });
+    }, { threshold: 0.1 });
+
+    colObs.observe(footer);
+
+})();
+
 
     // ============================================================
-    // 10. TYPING ANIMATION
+    // 11. TYPING ANIMATION
     // ============================================================
 
     const roles         = ["Data Analyst", "Data Scientist", "AI/ML Enthusiast"];
