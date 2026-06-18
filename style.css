@@ -80,6 +80,14 @@ header { position: fixed; width: 100%; top: 0; z-index: 1000; }
 .hero-text { max-width: 520px; }
 .hero-text span { color: #0a1f44; }
 
+/* CHANGE 1: Hero buttons wrapper */
+.hero-btns {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
 .btn {
     display: inline-block;
     padding: 12px 30px;
@@ -87,11 +95,29 @@ header { position: fixed; width: 100%; top: 0; z-index: 1000; }
     color: white;
     border-radius: 30px;
     text-decoration: none;
-    margin-top: 20px;
     transition: 0.3s;
 }
 
 .btn:hover { transform: translateY(-3px); }
+
+/* CHANGE 1: Resume button - outlined style to contrast with filled btn */
+.btn-resume {
+    background: transparent;
+    color: #0a1f44;
+    border: 2px solid #0a1f44;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-resume:hover {
+    background: #0a1f44;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(10, 31, 68, 0.25);
+}
+
+.btn-resume i { font-size: 14px; }
 
 .social-icons { margin-top: 25px; display: flex; gap: 15px; }
 
@@ -497,10 +523,19 @@ header { position: fixed; width: 100%; top: 0; z-index: 1000; }
 
 /* ============================================================
    7. CONTACT
+   ============================================================
+   CHANGE 2: Reduced top padding to close gap after Projects section
    ============================================================ */
 
 .contact {
-    position:relative;background:#060d1f;padding:40px 20px 50px;overflow:hidden;isolation:isolate;
+    position: relative;
+    background: #060d1f;
+    /* FIX: Was 40px top — Projects section has 140px bottom padding
+       which was stacking with contact's top padding = huge gap.
+       Setting padding-top to 70px closes it nicely. */
+    padding: 70px 20px 50px;
+    overflow: hidden;
+    isolation: isolate;
 }
 
 .contact-aurora {
@@ -522,6 +557,11 @@ header { position: fixed; width: 100%; top: 0; z-index: 1000; }
     background-image:linear-gradient(rgba(56,189,248,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,0.03) 1px,transparent 1px);
     background-size:60px 60px;
     mask-image:radial-gradient(ellipse at center,rgba(0,0,0,0.6) 0%,transparent 75%);
+}
+
+/* CHANGE 2: Also remove .section's default padding from contact since we override it above */
+.contact.section {
+    padding: 70px 20px 50px;
 }
 
 .section-title { text-align:center;margin-bottom:60px;font-size:32px;font-weight:600;color:#f1f5f9;text-shadow:0 0 40px rgba(56,189,248,0.2); }
@@ -795,7 +835,8 @@ header { position: fixed; width: 100%; top: 0; z-index: 1000; }
     .navbar { padding:15px 25px; }
 
     .hero-container { flex-direction:column;text-align:center;gap:40px; }
-    .social-icons   { justify-content:center;transform:translateX(15px); }
+    .hero-btns      { justify-content:center; }
+    .social-icons   { justify-content:center; }
 
     .projects       { padding:80px 16px 100px; }
     .projects-container { grid-template-columns:1fr;max-width:480px;gap:24px; }
@@ -839,6 +880,7 @@ header { position: fixed; width: 100%; top: 0; z-index: 1000; }
     .circle-wrap      { width:140px;height:140px; }
     .about-stats      { grid-template-columns:1fr; }
     .footer-center    { gap:14px; }
+    .hero-btns        { flex-direction:column;align-items:center; }
 }
 
 @media (max-width: 480px) {
