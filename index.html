@@ -49,7 +49,13 @@
             <h1>Hi, I'm <span>Ansh Pandey</span></h1>
             <h2>I am a <span class="typing"></span></h2>
             <p>I transform raw data into meaningful insights using Python, SQL, Power BI and Excel to drive business decisions.</p>
-            <a href="#projects" class="btn">View Projects</a>
+            <!-- CHANGE 1: Added Resume download button next to View Projects -->
+            <div class="hero-btns">
+                <a href="#projects" class="btn">View Projects</a>
+                <a href="resume.pdf" class="btn btn-resume" download>
+                    <i class="fas fa-download"></i> Resume
+                </a>
+            </div>
             <div class="social-icons">
                 <a href="https://github.com/ansh-pandey71" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
                 <a href="https://www.linkedin.com/in/ansh-pandey" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
@@ -262,7 +268,7 @@
 
     <div class="projects-container">
 
-        <!-- Project 1 — UPDATE href values with your real GitHub repo links -->
+        <!-- Project 1 -->
         <div class="project-card" data-tilt>
             <div class="card-inner">
                 <div class="card-shine"></div>
@@ -319,7 +325,6 @@
                     <p class="project-desc">Employee attrition analysis with deep EDA, predictive patterns & actionable business insights.</p>
                     <div class="tech-stack">
                         <span class="tech-pill">Excel</span>
-        
                     </div>
                     <div class="card-actions">
                         <a href="https://github.com/ansh-pandey71/hr-analytics" target="_blank" rel="noopener noreferrer" class="action-btn action-github">
@@ -347,13 +352,11 @@
                 <div class="project-content">
                     <div class="project-tags">
                         <span class="tag tag-cyan"><i class="fas fa-search"></i>MYSQL</span>
-                
                     </div>
                     <h3 class="project-title">E-Commerce Sales Analysis</h3>
                     <p class="project-desc">In-depth dataset analysis with top trend & data-driven trend discovery.</p>
                     <div class="tech-stack">
                         <span class="tech-pill">MYSQL</span>
-    
                     </div>
                     <div class="card-actions">
                         <a href="https://github.com/ansh-pandey71/eda-analysis" target="_blank" rel="noopener noreferrer" class="action-btn action-github">
@@ -401,6 +404,7 @@
 </section>
 
 <!-- CONTACT -->
+<!-- CHANGE 2: Removed extra top padding via CSS fix -->
 <section id="contact" class="contact section reveal scroll-animate">
     <h2 class="section-title">Get In Touch</h2>
 
